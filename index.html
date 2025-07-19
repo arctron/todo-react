@@ -14,21 +14,27 @@
     <div id="root"></div>
     <script type="text/babel">
 
-      function ToDoItem({todo}) {
+      function ToDoItem({todo, toggleComplete, deleteTodo}) {
         return (
-          <li>{todo}</li>
+          <li>
+            {todo.complete && '✅ '}
+            {todo.text} 
+            {' '}
+            <button onClick={() => toggleComplete(todo.id)}>Toggle Complete</button>
+            {' '}
+            <button onClick={() => deleteTodo(todo.id)}>Delete</button>
+          </li>
         );
       }
 
-      function ToDoList({todos}) {
+      function ToDoList({todos, toggleComplete, deleteTodo}) {
         return (
           <ul>
             {todos.map((todo) => (
-              <ToDoItem key={todo.id} todo={todo.text} />
+              <ToDoItem key={todo.id} todo={todo} toggleComplete={toggleComplete} deleteTodo={deleteTodo}/>
             ))}
           </ul>
         );
-
       }
 
       function ToDoInput({newTodo, setNewTodo, addTodo}) {
@@ -48,16 +54,29 @@
         
         function addTodo() {
           if (newTodo) {
-            setTodos([...todos, {id: uuidv4(), text: newTodo}]);
+            setTodos([...todos, {id: uuidv4(), text: newTodo, complete: false}]);
             setNewTodo('');
           }
+        }
+
+        function toggleComplete(todoId) {
+          setTodos(todos.map((todo) => {
+            if (todo.id === todoId) {
+              return {...todo, complete: !todo.complete};
+            }
+            return todo;
+          }));
+        }
+
+        function deleteTodo(todoId) {
+          setTodos(todos.filter((todo) => todo.id !== todoId));
         }
 
         return (
           <>
             <h2>Welcome to my To Do List app!</h2>
             <ToDoInput newTodo={newTodo} setNewTodo={setNewTodo} addTodo={addTodo} />
-            <ToDoList todos={todos} />
+            <ToDoList todos={todos} toggleComplete={toggleComplete} deleteTodo={deleteTodo}/>
           </>
         );
       }
