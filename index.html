@@ -24,8 +24,13 @@
 
       const container = document.getElementById('root');
       const root = ReactDOM.createRoot(container);
-      root.render(<MyApp />);
-
+      
+      root.render(
+        <React.StrictMode>
+          <MyApp />
+        </React.StrictMode>
+      );
+      
     </script>
     <!--
       Note: this page is a great way to try React but it's not suitable for production.
