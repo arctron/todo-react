@@ -8,16 +8,56 @@
 
     <!-- Don't use this in production: -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/uuid@8.3.2/dist/umd/uuidv4.min.js"></script>
   </head>
   <body>
     <div id="root"></div>
     <script type="text/babel">
+
+      function ToDoItem({todo}) {
+        return (
+          <li>{todo}</li>
+        );
+      }
+
+      function ToDoList({todos}) {
+        return (
+          <ul>
+            {todos.map((todo) => (
+              <ToDoItem key={todo.id} todo={todo.text} />
+            ))}
+          </ul>
+        );
+
+      }
+
+      function ToDoInput({newTodo, setNewTodo, addTodo}) {
+        return (
+          <div>
+            <input type="text" value={newTodo} onChange={(e) => setNewTodo(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && addTodo()}/>
+            {' '}
+            <button onClick={addTodo}>Add Item</button>
+          </div>
+        );
+      }
     
-      function MyApp() {
+      function App() {
+        const [newTodo, setNewTodo] = React.useState('');
+        const [todos, setTodos] = React.useState([]);
+        
+        function addTodo() {
+          if (newTodo) {
+            setTodos([...todos, {id: uuidv4(), text: newTodo}]);
+            setNewTodo('');
+          }
+        }
+
         return (
           <>
-            <h1>Hello, world!</h1>
-            <h2>This is my To Do List App!</h2>
+            <h2>Welcome to my To Do List app!</h2>
+            <ToDoInput newTodo={newTodo} setNewTodo={setNewTodo} addTodo={addTodo} />
+            <ToDoList todos={todos} />
           </>
         );
       }
@@ -27,7 +67,7 @@
       
       root.render(
         <React.StrictMode>
-          <MyApp />
+          <App />
         </React.StrictMode>
       );
       
