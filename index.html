@@ -14,7 +14,8 @@
     <div id="root"></div>
     <script type="text/babel">
 
-      function ToDoItem({todo, toggleComplete, deleteTodo}) {
+      const ToDoItem = React.memo(function ToDoItem({todo, toggleComplete, deleteTodo}) {
+        console.log("todo item called");
         return (
           <li>
             {todo.complete && '✅ '}
@@ -25,9 +26,10 @@
             <button onClick={() => deleteTodo(todo.id)}>Delete</button>
           </li>
         );
-      }
+      });
 
-      function ToDoList({todos, toggleComplete, deleteTodo}) {
+      const ToDoList = React.memo(function ToDoList({todos, toggleComplete, deleteTodo}) {
+        console.log("todo list called");
         return (
           <ul>
             {todos.map((todo) => (
@@ -35,9 +37,10 @@
             ))}
           </ul>
         );
-      }
+      });
 
       function ToDoInput({newTodo, setNewTodo, addTodo}) {
+        console.log("todo input called");
         return (
           <div>
             <input type="text" value={newTodo} onChange={(e) => setNewTodo(e.target.value)}
@@ -49,28 +52,29 @@
       }
     
       function App() {
+        console.log("app called");
         const [newTodo, setNewTodo] = React.useState('');
         const [todos, setTodos] = React.useState([]);
         
-        function addTodo() {
+        const addTodo = React.useCallback(() => {
           if (newTodo) {
-            setTodos([...todos, {id: uuidv4(), text: newTodo, complete: false}]);
+            setTodos(prevTodos => [...prevTodos, {id: uuidv4(), text: newTodo, complete: false}]);
             setNewTodo('');
           }
-        }
+        }, [newTodo]);
 
-        function toggleComplete(todoId) {
-          setTodos(todos.map((todo) => {
+        const toggleComplete = React.useCallback((todoId) => {
+          setTodos(prevTodos => prevTodos.map((todo) => {
             if (todo.id === todoId) {
               return {...todo, complete: !todo.complete};
             }
             return todo;
           }));
-        }
+        },[]);
 
-        function deleteTodo(todoId) {
-          setTodos(todos.filter((todo) => todo.id !== todoId));
-        }
+        const deleteTodo = React.useCallback((todoId) => {
+          setTodos(prevTodos => prevTodos.filter((todo) => todo.id !== todoId));
+        },[]);
 
         return (
           <>
