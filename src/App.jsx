@@ -1,19 +1,44 @@
-import { useState } from 'react'
+import { useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
+import ToDoInput from './components/ToDoInput.jsx';
+import ToDoList from './components/ToDoList.jsx';
 function App() {
-  const [count, setCount] = useState(0)
+  const [newTodo, setNewTodo] = useState('');
+  const [todos, setTodos] = useState([]);
+
+  function addTodo() {
+    if (newTodo) {
+      setTodos([...todos, { id: uuidv4(), text: newTodo, complete: false }]);
+      setNewTodo('');
+    }
+  }
+
+  function toggleComplete(todoId) {
+    setTodos(
+      todos.map((todo) => {
+        if (todo.id === todoId) {
+          return { ...todo, complete: !todo.complete };
+        }
+        return todo;
+      }),
+    );
+  }
+
+  function deleteTodo(todoId) {
+    setTodos(todos.filter((todo) => todo.id !== todoId));
+  }
 
   return (
     <>
-      <center>
-        <h1>To Do List</h1>
-        <div>
-          <button onClick={() => setCount((count) => count + 1)}>
-           count is {count}
-         </button>
-        </div>
-      </center>
+      <h2>Welcome to my To Do List app!</h2>
+      <ToDoInput newTodo={newTodo} setNewTodo={setNewTodo} addTodo={addTodo} />
+      <ToDoList
+        todos={todos}
+        toggleComplete={toggleComplete}
+        deleteTodo={deleteTodo}
+      />
     </>
-  )
+  );
 }
 
-export default App
+export default App;
