@@ -1,10 +1,20 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import ToDoInput from './components/ToDoInput.jsx';
 import ToDoList from './components/ToDoList.jsx';
 function App() {
   const [newTodo, setNewTodo] = useState('');
-  const [todos, setTodos] = useState([]);
+  const [todos, setTodos] = useState(() => {
+    const savedTodos = localStorage.getItem('todos');
+    if (savedTodos) {
+      return JSON.parse(savedTodos);
+    }
+    return [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(todos));
+  }, [todos]);
 
   function addTodo() {
     if (newTodo) {
