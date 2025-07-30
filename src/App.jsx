@@ -19,6 +19,12 @@ function App() {
   function addTodo() {
     const trimmed = newTodo.trim();
     if (trimmed) {
+      for (const element of todos) {
+        if (element.text === trimmed) {
+          alert('To-Do item already exists.');
+          return;
+        }
+      }
       setTodos([...todos, { id: uuidv4(), text: trimmed, complete: false }]);
       setNewTodo('');
     } else {
