@@ -46,7 +46,9 @@ function App() {
   }
 
   function deleteTodo(todoId) {
-    setTodos(todos.filter((todo) => todo.id !== todoId));
+    if (confirm('Are you sure you want to delete this item?')) {
+      setTodos(todos.filter((todo) => todo.id !== todoId));
+    }
   }
 
   function clearTodos() {
