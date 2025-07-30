@@ -38,10 +38,19 @@ function App() {
     setTodos(todos.filter((todo) => todo.id !== todoId));
   }
 
+  function clearTodos() {
+    setTodos([]);
+  }
+
   return (
     <>
       <h2>Welcome to my To Do List app!</h2>
-      <ToDoInput newTodo={newTodo} setNewTodo={setNewTodo} addTodo={addTodo} />
+      <ToDoInput
+        newTodo={newTodo}
+        setNewTodo={setNewTodo}
+        addTodo={addTodo}
+        clearTodos={clearTodos}
+      />
       <ToDoList
         todos={todos}
         toggleComplete={toggleComplete}
