@@ -17,9 +17,12 @@ function App() {
   }, [todos]);
 
   function addTodo() {
-    if (newTodo) {
-      setTodos([...todos, { id: uuidv4(), text: newTodo, complete: false }]);
+    const trimmed = newTodo.trim();
+    if (trimmed) {
+      setTodos([...todos, { id: uuidv4(), text: trimmed, complete: false }]);
       setNewTodo('');
+    } else {
+      alert('Please enter a to-do item.');
     }
   }
 
