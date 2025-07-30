@@ -1,4 +1,5 @@
 export default function ToDoInput({
+  inputRef,
   newTodo,
   setNewTodo,
   addTodo,
@@ -7,6 +8,7 @@ export default function ToDoInput({
   return (
     <div>
       <input
+        ref={inputRef}
         type="text"
         value={newTodo}
         onChange={(e) => setNewTodo(e.target.value)}

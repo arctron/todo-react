@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import ToDoInput from './components/ToDoInput.jsx';
 import ToDoList from './components/ToDoList.jsx';
 function App() {
+  const inputRef = useRef(null);
   const [newTodo, setNewTodo] = useState('');
   const [todos, setTodos] = useState(() => {
     const savedTodos = localStorage.getItem('todos');
@@ -14,6 +15,7 @@ function App() {
 
   useEffect(() => {
     localStorage.setItem('todos', JSON.stringify(todos));
+    inputRef.current.focus();
   }, [todos]);
 
   function addTodo() {
@@ -55,6 +57,7 @@ function App() {
     <>
       <h2>Welcome to my To Do List app!</h2>
       <ToDoInput
+        inputRef={inputRef}
         newTodo={newTodo}
         setNewTodo={setNewTodo}
         addTodo={addTodo}
